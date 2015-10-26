@@ -1,10 +1,15 @@
-# localStorageDB 2.3.1
-localStorageDB is a simple layer over localStorage (and sessionStorage) that provides 
+# localFtorageDB 1.0.0
+localForageDB is a simple layer over localForage (http://mozilla.github.io/localForage/) that provides 
 a set of functions to store structured data like databases and tables.
 It provides basic insert/update/delete/query capabilities.
-localStorageDB has no dependencies, and is not based on WebSQL. Underneath it all, 
-the structured data is stored as serialized JSON in localStorage or sessionStorage.
+localForageDB depends on localForage. Underneath it all, 
+the structured data is stored via localForage in WebSQL, IndexedDb or localStorage.
 
+
+- Alexander Kuttig
+- v 1.0.0 Okt 2015
+
+based on localStorageDb (https://github.com/knadh/localStorageDB)
 - Kailash Nadh
 - v 2.3.1 Mar 2015
 - v 2.3.0 Feb 2014 Contribution: Christian Kellner (http://orange-coding.net)
@@ -15,34 +20,21 @@ the structured data is stored as serialized JSON in localStorage or sessionStora
 - Documentation: [http://nadh.in/code/localstoragedb](http://nadh.in/code/localstoragedb)
 - Licensed: MIT license
 
-# Installation
-`bower install localstoragedb`
-
-# Run Test Cases
-
-```shell
-bower install # install mocha and chai for running test cases
-```
-`open test/local_storage_db_test.html in Browser to check the result`
-
 # Supported Browsers
-Browsers need to support "Local Storage" in order to make localeStorageDB working.
-
-- IE 8<
-- Firefox 31<
-- Chrome 31<
-- Safari 7<
-- iOS Safari 7.1<
-- Android Browser 4.1<
-- Chrome for Android 42<
+Browsers need to support localstorage, indexeddb or websql in order to make localeForageDB working.
 
 # Usage / Examples
 ### Creating a database, table, and populating the table
 
-```javascript
-// Initialise. If the database doesn't exist, it is created
-var lib = new localStorageDB("library", localStorage);
+Because localForageDB uses localForage, which uses async storage, localForageDB has an async API for storing and retrieving the databases. It's otherwise exactly the same as the localStorageDB API.
 
+```javascript
+// Initialise and create db object 
+var lib = new localForageDB("library", function(err, value){
+	console.log(value);
+});
+
+// CAUTION: this code works only if the db object is already created. Try to use it inside the callback
 // Check if the database was just created. Useful for initial database setup
 if( lib.isNew() ) {
 
@@ -59,7 +51,7 @@ if( lib.isNew() ) {
 	lib.insert("books", {code: "B007", title: "The user illusion", author: "Norretranders", year: 1999, copies: 10});
 	lib.insert("books", {code: "B008", title: "Hubble: Window of the universe", author: "Sparrow", year: 2010, copies: 10});
 	
-	// commit the database to localStorage
+	// commit the database to localForage
 	// all create/drop/insert/update/delete operations should be committed
 	lib.commit();
 }
@@ -89,13 +81,13 @@ if( lib.isNew() ) {
 // If database already exists, and want to alter existing tables
 if(! (lib.columnExists("books", "publication")) ) {
 	lib.alterTable("books", "publication", "McGraw-Hill Education");
-	lib.commit(); // commit the deletions to localStorage
+	lib.commit(); // commit the deletions to localForage
 }
 
 // Multiple columns can also added at once
 if(! (lib.columnExists("books", "publication") && lib.columnExists("books", "ISBN")) ) {
 	lib.alterTable("books", ["publication", "ISBN"], {publication: "McGraw-Hill Education", ISBN: "85-359-0277-5"});
-	lib.commit(); // commit the deletions to localStorage
+	lib.commit(); // commit the deletions to localForage
 }
 ```
 
@@ -245,7 +237,7 @@ lib.deleteRows("books", function(row) {
 	}
 });
 
-lib.commit(); // commit the deletions to localStorage
+lib.commit(); // commit the deletions to localForage
 ```
 
 
@@ -260,10 +252,10 @@ lib.commit(); // commit the deletions to localStorage
 	</thead>
 	<tbody>
 		<tr>
-			<td>localStorageDB()</td>
-			<td>database_name, storage_engine</td>
+			<td>localForageDB()</td>
+			<td>database_name, callback</td>
 			<td>Constructor<br />
-				- storage_engine can either be localStorage (default) or sessionStorage
+				- storage_engine is automatically selected. Callback gets error object first (callback(err, value))
 			</td>
 		</tr>
 		<tr>
@@ -282,14 +274,9 @@ lib.commit(); // commit the deletions to localStorage
 			<td>Returns the number of tables in a database</td>
 		</tr>
 		<tr>
-			<td>commit()</td>
-			<td></td>
-			<td>Commits the database to localStorage. Returns true if successful, and false otherwise (highly unlikely)</td>
-		</tr>
-		<tr>
-			<td>serialize()</td>
-			<td></td>
-			<td>Returns the entire database as serialized JSON</td>
+			<td>commit</td>
+			<td>callback</td>
+			<td>Commits the database to localStorage. Returns true if successful, and false otherwise (highly unlikely), Callback gets error object first (callback(err, value))</td>
 		</tr>
 
 
