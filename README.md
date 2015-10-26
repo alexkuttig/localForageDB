@@ -1,4 +1,4 @@
-# localForageDB 1.0.0
+# localForageDB 0.1
 localForageDB is a simple layer over localForage (http://mozilla.github.io/localForage/) that provides 
 a set of functions to store structured data like databases and tables.
 It provides basic insert/update/delete/query capabilities.
@@ -7,7 +7,7 @@ the structured data is stored via localForage in WebSQL, IndexedDb or localStora
 
 
 - Alexander Kuttig
-- v 1.0.0 Okt 2015
+- v 0.1 Okt 2015
 - Licensed: MIT license
 
 based on localStorageDb (https://github.com/knadh/localStorageDB)
