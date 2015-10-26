@@ -8,6 +8,7 @@ the structured data is stored via localForage in WebSQL, IndexedDb or localStora
 
 - Alexander Kuttig
 - v 1.0.0 Okt 2015
+- Licensed: MIT license
 
 based on localStorageDb (https://github.com/knadh/localStorageDB)
 - Kailash Nadh
