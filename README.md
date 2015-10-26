@@ -1,4 +1,4 @@
-# localFtorageDB 1.0.0
+# localForageDB 1.0.0
 localForageDB is a simple layer over localForage (http://mozilla.github.io/localForage/) that provides 
 a set of functions to store structured data like databases and tables.
 It provides basic insert/update/delete/query capabilities.
